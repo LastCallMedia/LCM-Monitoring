@@ -15,8 +15,7 @@ checkout:
 test:
   override:
     - ln -s ~/LCM-Monitoring ~/drupal/modules/lcm_monitoring
-    - vendor/bin/phpunit -c modules/lcm_monitoring:
-        pwd: $HOME/drupal
+    - cd ~/drupal && vendor/bin/phpunit -c modules/lcm_monitoring
 
 
 
