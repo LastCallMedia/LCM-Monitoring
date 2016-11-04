@@ -10,7 +10,7 @@ dependencies:
 
 checkout:
   post:
-    - composer create-project -n --no-scripts --no-plugins drupal/drupal
+    - composer create-project -n --no-scripts --no-plugins drupal/drupal ~/drupal
 
 test:
   override:
