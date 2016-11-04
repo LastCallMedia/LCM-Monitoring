@@ -1,0 +1,18 @@
+{
+    "name": "drupal/lcm-monitoring",
+    "description": "Monitoring module for Drupal",
+    "authors": [
+        {
+            "name": "Rob Bayliss",
+            "email": "rob@lastcallmedia.com"
+        }
+    ],
+    "type": "drupal-module",
+    "license": "GPL-2.0+",
+    "minimum-stability": "dev",
+    "require": {
+        "monolog/monolog": "^1.0",
+        "graylog2/gelf-php": "^1.0",
+        "jimdo/prometheus_client_php": "^0.7.0"
+    }
+}
