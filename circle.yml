@@ -1,0 +1,19 @@
+machine:
+  php:
+    version: 7.0.4
+
+dependencies:
+  override:
+
+checkout:
+  post:
+    - composer create-project drupal/drupal
+    - ln -s ~/lcm_monitoring
+
+test:
+  override:
+    - ln -s ~/LCM-Monitoring ~/drupal/modules/lcm_monitoring
+    - vendor/bin/phpunit -c modules/lcm_monitoring
+
+
+
