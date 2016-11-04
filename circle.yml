@@ -4,10 +4,12 @@ machine:
 
 dependencies:
   override:
+  cache_directories:
+    - "~/.composer/cache"
 
 checkout:
   post:
-    - composer create-project drupal/drupal
+    - composer create-project -n --no-scripts --no-plugins drupal/drupal
     - ln -s ~/lcm_monitoring
 
 test:
