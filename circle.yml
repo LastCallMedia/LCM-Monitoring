@@ -4,18 +4,19 @@ machine:
 
 dependencies:
   override:
+    - echo "Ignore CircleCI defaults"
   cache_directories:
     - "~/.composer/cache"
 
 checkout:
   post:
     - composer create-project -n --no-scripts --no-plugins drupal/drupal
-    - ln -s ~/lcm_monitoring
 
 test:
   override:
-    - ln -s ~/LCM-Monitoring ~/drupal/modules/lcm_monitoring
-    - vendor/bin/phpunit -c modules/lcm_monitoring
+    - ln -s ~/drupal/modules/lcm_monitoring ~/LCM-Monitoring
+    - vendor/bin/phpunit -c modules/lcm_monitoring:
+        pwd: ~/drupal
 
 
 
