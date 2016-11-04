@@ -11,11 +11,11 @@ dependencies:
 
 checkout:
   post:
-    - test -f ~/drupal || { composer create-project -n --no-scripts --no-plugins drupal/drupal ~/drupal &&  ln -s ~/LCM-Monitoring ~/drupal/modules/lcm_monitoring }
+    - test -f ~/drupal || composer create-project -n --no-scripts --no-plugins drupal/drupal ~/drupal
 
 test:
   override:
-    - ln -s ~/LCM-Monitoring ~/drupal/modules/lcm_monitoring
+    - rsync -a --delete ~/LCM-Monitoring/ ~/drupal/modules_lcm_monitoring/
     - cd ~/drupal && vendor/bin/phpunit -c modules/lcm_monitoring
 
 
