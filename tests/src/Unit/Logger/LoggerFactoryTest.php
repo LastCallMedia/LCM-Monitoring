@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\lcm_metrics\Logger;
+namespace Drupal\Tests\lcm_metrics\Unit\Logger;
 
 use Drupal\Core\Logger\LogMessageParserInterface;
 use Drupal\lcm_monitoring\Logger\LevelTranslatingLogger;
