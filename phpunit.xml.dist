@@ -14,8 +14,8 @@
     </testsuite>
   </testsuites>
   <listeners>
-    <!--<listener class="\Drupal\Tests\Standards\DrupalStandardsListener">-->
-    <!--</listener>-->
+    <listener class="\Drupal\Tests\Standards\DrupalStandardsListener">
+    </listener>
   </listeners>
   <!-- Filter for coverage reports. -->
   <filter>
