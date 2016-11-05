@@ -14,8 +14,7 @@ checkout:
 
 test:
   override:
-    - >
-      cd ~/drupal && composer config repositories.lcm_monitoring '{"type": "path", "url": "~/LCM-Monitoring", "options": {"symlink": false}}'
+    - cd ~/drupal && composer config repositories.lcm_monitoring '{"type":"path", "url":"~/LCM-Monitoring", "options":{"symlink":false}}'
     - cd ~/drupal && composer require drupal/lcm_monitoring
     - cd ~/drupal && vendor/bin/phpunit -c modules/lcm_monitoring
 
