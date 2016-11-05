@@ -36,6 +36,15 @@ class DrupalMessageProcessor {
       $record['channel'] = $record['context']['channel'];
       unset($record['context']['channel']);
     }
+
+    // Line and file are often set as placeholders in Drupal logs.  Copy them to
+    // extra.
+    foreach(['line', 'file'] as $key) {
+      if(isset($placeholders["%${key}"]) && !isset($record['extra'][$key])) {
+        $record['extra'][$key] = $placeholders["%${key}"];
+      }
+    }
+
     // Move context properties to extra.
     foreach (static::$extraProperties as $property) {
       if (isset($record['context'][$property])) {

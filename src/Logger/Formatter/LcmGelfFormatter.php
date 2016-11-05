@@ -43,13 +43,6 @@ class LcmGelfFormatter extends GelfMessageFormatter {
     $record['extra']['project'] = $this->projectName;
 
     $placeholders = $this->parser->parseMessagePlaceholders($record['message'], $record['context']);
-    // Copy file and line placeholders into extra.
-    if (isset($placeholders['%file']) && !isset($record['extra']['file'])) {
-      $record['extra']['file'] = $placeholders['%file'];
-    }
-    if (isset($placeholders['%line']) && !isset($record['extra']['line'])) {
-      $record['extra']['line'] = $placeholders['%line'];
-    }
     // Now strip out the placeholders so they don't take up extra space.
     $record['context'] = array_diff_key($record['context'], $placeholders);
     foreach (static::$contextIgnore as $property) {

@@ -28,6 +28,20 @@ class DrupalMessageProcessorTest extends \PHPUnit_Framework_TestCase {
     $this->assertEquals('foo', $record['channel']);
   }
 
+  public function testCopiesFile() {
+    $processor = new DrupalMessageProcessor(new LogMessageParser());
+    $record = $this->createRecord(['context' => ['%file' => 'foo']]);
+    $record = $processor($record);
+    $this->assertEquals(['file' => 'foo'], $record['extra']);
+  }
+
+  public function testCopiesLine() {
+    $processor = new DrupalMessageProcessor(new LogMessageParser());
+    $record = $this->createRecord(['context' => ['%line' => 5]]);
+    $record = $processor($record);
+    $this->assertEquals(['line' => 5], $record['extra']);
+  }
+
   public function testMovesExtraProperties() {
     $processor = new DrupalMessageProcessor(new LogMessageParser());
     $context = [
