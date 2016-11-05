@@ -7,15 +7,15 @@ dependencies:
     - echo "Ignore CircleCI defaults"
   cache_directories:
     - "~/.composer/cache"
-    - "~/drupal"
 
 checkout:
   post:
-    - test -d ~/drupal || composer create-project -n drupal/drupal ~/drupal
+    - composer create-project -n --no-install drupal/drupal ~/drupal
 
 test:
   override:
-    - rsync -a --delete ~/LCM-Monitoring/ ~/drupal/modules/lcm_monitoring/
+    - cd ~/drupal && composer config repositories.lcm-monitoring path ~/LCM-Monitoring
+    - cd ~/drupal && composer require drupal/lcm_monitoring
     - cd ~/drupal && vendor/bin/phpunit -c modules/lcm_monitoring
 
 
