@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\lcm_metrics\Logger;
+namespace Drupal\Tests\lcm_monitoring\Logger;
 
 use Drupal\lcm_monitoring\Logger\LevelTranslatingLogger;
 use Monolog\Handler\HandlerInterface;
