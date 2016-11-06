@@ -87,7 +87,7 @@ class SettingsForm extends ConfigFormBase {
         $form_state->setError($form['logger_port'], $this->t('Invalid port'));
       }
       // Check that the hostname is either an IP for a valid hostname.
-      if (empty($host) || (!filter_var($host, FILTER_VALIDATE_IP) && !checkdnsrr($host))) {
+      if (empty($host) || (!filter_var($host, FILTER_VALIDATE_IP) && !checkdnsrr($host, 'A'))) {
         $form_state->setError($form['logger_host'], $this->t('Invalid hostname'));
       }
     }
