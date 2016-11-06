@@ -12,7 +12,6 @@
     "minimum-stability": "dev",
     "require": {
         "monolog/monolog": "^1.0",
-        "graylog2/gelf-php": "^1.0",
-        "jimdo/prometheus_client_php": "^0.7.0"
+        "graylog2/gelf-php": "^1.0"
     }
 }

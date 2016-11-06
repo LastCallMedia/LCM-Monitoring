@@ -7,28 +7,3 @@ services:
   lcm_monitoring.logger_factory:
     class: Drupal\lcm_monitoring\Logger\LoggerFactory
     arguments: ['@config.factory', '@logger.log_message_parser']
-
-  lcm_monitoring.metrics_storage_factory:
-    class: Drupal\lcm_monitoring\Metrics\MetricsStorageFactory
-  lcm_monitoring.metrics_storage:
-    class: Prometheus\Storage\Adapter
-    factory: lcm_monitoring.metrics_storage_factory:getStorage
-  lcm_monitoring.metrics_registry:
-    class: Prometheus\CollectorRegistry
-    arguments: ['@lcm_monitoring.metrics_storage']
-
-  # Metrics listeners
-  lcm_monitoring.response_metrics_subscriber:
-    class: Drupal\lcm_monitoring\Subscriber\ResponseMetricsSubscriber
-    arguments: ['@lcm_monitoring.metrics_registry']
-    tags:
-      - { name: event_subscriber }
-  lcm_monitoring.apc_metrics_subscriber:
-    class: Drupal\lcm_monitoring\Subscriber\ApcMetricsSubscriber
-    tags:
-      - { name: event_subscriber }
-  lcm_monitoring.drupal_metrics_subscriber:
-    class: Drupal\lcm_monitoring\Subscriber\DrupalMetricsSubscriber
-    arguments: ['@state']
-    tags:
-      - { name: event_subscriber }

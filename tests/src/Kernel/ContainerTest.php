@@ -32,35 +32,4 @@ class ContainerTest extends KernelTestBase {
       $this->container->get('lcm_monitoring.logger')
     );
   }
-
-  public function testHasCollectorRegistry() {
-    $this->assertInstanceOf(
-      CollectorRegistry::class,
-      $this->container->get('lcm_monitoring.metrics_registry')
-    );
-  }
-
-  public function testDispatcherHasCollectMetricsListeners() {
-    $dispatcher = $this->container->get('event_dispatcher');
-
-    $metricsListeners = $dispatcher->getListeners(MetricEvents::FETCH_METRICS);
-    $this->assertListenersContainService('lcm_monitoring.apc_metrics_subscriber', $metricsListeners);
-    $this->assertListenersContainService('lcm_monitoring.drupal_metrics_subscriber', $metricsListeners);
-
-    $responseListeners = $dispatcher->getListeners(KernelEvents::RESPONSE);
-    $this->assertListenersContainService('lcm_monitoring.response_metrics_subscriber', $responseListeners);
-
-    $exceptionListeners = $dispatcher->getListeners(KernelEvents::EXCEPTION);
-    $this->assertListenersContainService('lcm_monitoring.response_metrics_subscriber', $exceptionListeners);
-  }
-
-  protected function assertListenersContainService($serviceId, array $listeners) {
-    $serviceIds = array_map(function ($listener) {
-      if (is_array($listener) && isset($listener[0]->_serviceId)) {
-        return $listener[0]->_serviceId;
-      }
-    }, $listeners);
-    $this->assertTrue(in_array($serviceId, $serviceIds));
-  }
-
 }

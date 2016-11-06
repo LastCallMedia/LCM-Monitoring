@@ -1,10 +1,3 @@
-lcm_monitoring.metrics:
-  path: '/metrics'
-  defaults:
-    _controller: 'Drupal\lcm_monitoring\Controller\MetricsController::getMetricsAction'
-    _title: 'Metrics'
-  requirements:
-    _access: 'TRUE'
 lcm_monitoring.admin_settings:
   path: '/admin/config/development/monitoring'
   defaults:
