@@ -1,4 +1,8 @@
 services:
+  lcm_monitoring.settings:
+    class: Drupal\lcm_monitoring\Settings
+    factory: Drupal\lcm_monitoring\Settings\MonitoringSettings::factory
+    arguments: ['@settings']
   lcm_monitoring.logger:
     class: Drupal\lcm_monitoring\Logger\LevelTranslatingLogger
     factory: lcm_monitoring.logger_factory:getLogger
@@ -6,4 +10,4 @@ services:
       - { name: logger }
   lcm_monitoring.logger_factory:
     class: Drupal\lcm_monitoring\Logger\LoggerFactory
-    arguments: ['@config.factory', '@logger.log_message_parser']
+    arguments: ['@lcm_monitoring.settings', '@logger.log_message_parser']

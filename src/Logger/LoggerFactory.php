@@ -4,8 +4,9 @@ namespace Drupal\lcm_monitoring\Logger;
 
 use Drupal\lcm_monitoring\Logger\Formatter\LcmGelfFormatter;
 use Drupal\lcm_monitoring\Logger\Processor\DrupalMessageProcessor;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LogMessageParserInterface;
+use Drupal\lcm_monitoring\Logger\Processor\ProjectEnvironmentProcessor;
+use Drupal\lcm_monitoring\Settings\MonitoringSettings;
 use Gelf\Publisher;
 use Gelf\Transport\UdpTransport;
 use Monolog\Handler\GelfHandler;
@@ -16,14 +17,17 @@ use Psr\Log\NullLogger;
  */
 class LoggerFactory {
 
-  private $configFactory;
+  /**
+   * @var \Drupal\Core\Site\Settings
+   */
+  private $settings;
   private $parser;
 
   /**
    * Constructor.
    */
-  public function __construct(ConfigFactoryInterface $configFactory, LogMessageParserInterface $parser) {
-    $this->configFactory = $configFactory;
+  public function __construct(MonitoringSettings $settings, LogMessageParserInterface $parser) {
+    $this->settings = $settings;
     $this->parser = $parser;
   }
 
@@ -34,20 +38,25 @@ class LoggerFactory {
    *   The logger instance.
    */
   public function getLogger() {
-    $config = $this->configFactory->get('lcm_monitoring.settings');
-    $loggerConfig = $config->get('logger');
-    $projectId = $config->get('projectid');
-    if (TRUE !== $loggerConfig['enabled']) {
+    if (TRUE !== $this->settings->getLoggerEnabled()) {
       // We aren't active, but we've promised to return a logger.
       return new NullLogger();
     }
 
-    $transport = new UdpTransport($loggerConfig['host'], $loggerConfig['port']);
+    $transport = new UdpTransport(
+      $this->settings->getHost(),
+      $this->settings->getPort()
+    );
     $publisher = new Publisher($transport);
     $handler = new GelfHandler($publisher);
-    $handler->setFormatter(new LcmGelfFormatter($projectId, gethostname(), $this->parser));
-    $processor = new DrupalMessageProcessor($this->parser);
-    return new LevelTranslatingLogger('default', [$handler], [$processor]);
+    $handler->setFormatter(new LcmGelfFormatter(gethostname(), $this->parser));
+
+    $processors[] = new DrupalMessageProcessor($this->parser);
+    $processors[] = new ProjectEnvironmentProcessor(
+      $this->settings->getProject(),
+      $this->settings->getEnvironment()
+    );
+    return new LevelTranslatingLogger('default', [$handler], $processors);
   }
 
 }

@@ -30,8 +30,7 @@ class LcmGelfFormatter extends GelfMessageFormatter {
   /**
    * Constructor.
    */
-  public function __construct($projectName, $systemName, LogMessageParserInterface $parser) {
-    $this->projectName = $projectName;
+  public function __construct($systemName, LogMessageParserInterface $parser) {
     $this->parser = $parser;
     parent::__construct($systemName);
   }
@@ -40,8 +39,6 @@ class LcmGelfFormatter extends GelfMessageFormatter {
    * {@inheritdoc}
    */
   public function format(array $record) {
-    $record['extra']['project'] = $this->projectName;
-
     $placeholders = $this->parser->parseMessagePlaceholders($record['message'], $record['context']);
     // Now strip out the placeholders so they don't take up extra space.
     $record['context'] = array_diff_key($record['context'], $placeholders);

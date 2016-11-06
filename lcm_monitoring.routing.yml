@@ -1,7 +1,0 @@
-lcm_monitoring.admin_settings:
-  path: '/admin/config/development/monitoring'
-  defaults:
-    _form: '\Drupal\lcm_monitoring\Form\SettingsForm'
-    _title: 'Monitoring settings'
-  requirements:
-    _permission: 'administer site configuration'

@@ -18,15 +18,11 @@ class ContainerTest extends KernelTestBase {
   public static $modules = [
     'lcm_monitoring',
   ];
-
+  
   public function testHasLogger() {
-    $this->config('lcm_monitoring.settings')
-      ->set('logger', [
-        'enabled' => TRUE,
-        'host' => 'example.com',
-        'port' => 5555,
-      ])
-      ->save();
+    $this->setSetting('lcm_monitoring', [
+      'logger' => TRUE,
+    ]);
     $this->assertInstanceOf(
       LevelTranslatingLogger::class,
       $this->container->get('lcm_monitoring.logger')

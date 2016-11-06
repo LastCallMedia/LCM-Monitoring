@@ -11,16 +11,9 @@ use Drupal\Tests\lcm_monitoring\Unit\Logger\LoggerTestTrait;
 class LcmGelfFormatterTest extends \PHPUnit_Framework_TestCase {
   use LoggerTestTrait;
 
-  public function testSetsProject() {
-    $record = $this->createRecord();
-    $formatter = new LcmGelfFormatter('foo', 'bar', new LogMessageParser());
-    $message = $formatter->format($record);
-    $this->assertEquals($message->getAdditional('project'), 'foo');
-  }
-
   public function testStripsPlaceholders() {
     $record = $this->createRecord(['context' => ['%foo' => 'barbaz']]);
-    $formatter = new LcmGelfFormatter('foo', 'bar', new LogMessageParser());
+    $formatter = new LcmGelfFormatter('bar', new LogMessageParser());
     $message = $formatter->format($record);
     $this->assertFalse(in_array('barbaz', $message->getAllAdditionals()));
   }
@@ -33,8 +26,8 @@ class LcmGelfFormatterTest extends \PHPUnit_Framework_TestCase {
         'user' => 'john',
       ]
     ]);
-    $formatter = new LcmGelfFormatter('foo', 'bar', new LogMessageParser());
+    $formatter = new LcmGelfFormatter('bar', new LogMessageParser());
     $message = $formatter->format($record);
-    $this->assertEquals($message->getAllAdditionals(), ['project' => 'foo']);
+    $this->assertEquals($message->getAllAdditionals(), []);
   }
 }
