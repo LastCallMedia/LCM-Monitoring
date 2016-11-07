@@ -29,7 +29,7 @@ class DrupalMessageProcessor {
   public function __invoke(array $record) {
     $placeholders = $this->parser->parseMessagePlaceholders($record['message'], $record['context']);
     // Preserve the file and line placeholders if they're present.
-    $record['message'] = empty($placeholders) ? $record['message'] : strtr($record['message'], $record['context']);
+    $record['message'] = empty($placeholders) ? $record['message'] : strtr($record['message'], $placeholders);
 
     // Channel is handled differently between monolog and Drupal. Fix it.
     if (isset($record['context']['channel'])) {

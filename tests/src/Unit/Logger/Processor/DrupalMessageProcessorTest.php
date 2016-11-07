@@ -15,7 +15,7 @@ class DrupalMessageProcessorTest extends \PHPUnit_Framework_TestCase {
     $processor = new DrupalMessageProcessor(new LogMessageParser());
     $record = $this->createRecord([
       'message' => 'Foo %bar',
-      'context' => ['%bar' => 'baz'],
+      'context' => ['%bar' => 'baz', 'Foo' => 'fiz'],
     ]);
     $record = $processor->__invoke($record);
     $this->assertEquals('Foo baz', $record['message']);
