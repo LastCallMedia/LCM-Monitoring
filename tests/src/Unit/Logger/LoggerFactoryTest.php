@@ -7,6 +7,7 @@ use Drupal\lcm_monitoring\Logger\LevelTranslatingLogger;
 use Drupal\lcm_monitoring\Logger\LoggerFactory;
 use Drupal\lcm_monitoring\Settings\MonitoringSettings;
 use Drupal\Tests\UnitTestCase;
+use Prophecy\Argument;
 use Psr\Log\NullLogger;
 
 /**
@@ -28,6 +29,15 @@ class LoggerFactoryTest extends UnitTestCase {
     $parser = $this->prophesize(LogMessageParserInterface::class);
     $factory = new LoggerFactory($settings, $parser->reveal());
     $this->assertInstanceOf(LevelTranslatingLogger::class, $factory->getLogger());
+  }
+
+  public function testLoggerCannotThrowException() {
+    $settings = new MonitoringSettings(TRUE, 'badhostname');
+    $parser = $this->prophesize(LogMessageParserInterface::class);
+    $parser->parseMessagePlaceholders(Argument::type('string'), Argument::type('array'))->willReturn([]);
+    $factory = new LoggerFactory($settings, $parser->reveal());
+    $logger = $factory->getLogger();
+    $logger->alert('test');
   }
 
 }

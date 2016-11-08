@@ -10,6 +10,7 @@ use Drupal\lcm_monitoring\Settings\MonitoringSettings;
 use Gelf\Publisher;
 use Gelf\Transport\UdpTransport;
 use Monolog\Handler\GelfHandler;
+use Monolog\Handler\WhatFailureGroupHandler;
 use Psr\Log\NullLogger;
 
 /**
@@ -56,7 +57,10 @@ class LoggerFactory {
       $this->settings->getProject(),
       $this->settings->getEnvironment()
     );
-    return new LevelTranslatingLogger('default', [$handler], $processors);
+    // Don't ever allow the logger to crash the site.  Wrap our handler with one
+    // that swallows exceptions.
+    $wrappingHandler = new WhatFailureGroupHandler([$handler]);
+    return new LevelTranslatingLogger('default', [$wrappingHandler], $processors);
   }
 
 }
