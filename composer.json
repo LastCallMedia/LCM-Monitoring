@@ -11,7 +11,6 @@
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
     "require": {
-        "monolog/monolog": "^1.0",
-        "graylog2/gelf-php": "^1.0"
+        "drupal/monolog": "^1.0",
     }
 }
