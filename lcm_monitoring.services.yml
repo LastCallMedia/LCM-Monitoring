@@ -1,10 +1,15 @@
 parameters:
+  # Temporary - this will likely be replaced by a public URL later on.
   lcm_monitoring.log_socket: "tcp://host.docker.internal:9001"
 
 services:
+  # The outer handler swallows any errors that might be thrown,
+  # prevent log-related fatals from killing the site.
   monolog.handler.lcm:
     class: Monolog\Handler\WhatFailureGroupHandler
     arguments: [["@monolog.handler.lcm_inner"]]
+
+  # The inner handler ships data over a socket, either TCP or UDP.
   monolog.handler.lcm_inner:
     class: Monolog\Handler\SocketHandler
     arguments: ["%lcm_monitoring.log_socket%"]
@@ -16,5 +21,7 @@ services:
       - method: setPersistent
         arguments: [true]
 
+  # The formatter is responsible for making the log data usable within
+  # the ELK stack.
   monolog.formatter.lcm:
     class: Drupal\lcm_monitoring\ECSFormatter
