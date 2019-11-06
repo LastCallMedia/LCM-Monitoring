@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Drupal\lcm_monitoring\Logger;
+namespace Drupal\lcm_monitoring;
 
 use Monolog\Formatter\NormalizerFormatter;
 
