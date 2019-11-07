@@ -3,3 +3,6 @@ name: 'LCM Monitoring'
 description: 'Provides remote logging and metrics services for Drupal sites.'
 type: module
 core: 8.x
+
+dependencies:
+  - drupal:monolog

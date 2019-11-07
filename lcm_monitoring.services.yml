@@ -1,13 +1,26 @@
+parameters:
+  lcm_monitoring.log_socket: "tls://logging.api.lastcallmedia.com:9000"
+
 services:
-  lcm_monitoring.settings:
-    class: Drupal\lcm_monitoring\Settings
-    factory: Drupal\lcm_monitoring\Settings\MonitoringSettings::factory
-    arguments: ['@settings']
-  lcm_monitoring.logger:
-    class: Drupal\lcm_monitoring\Logger\LevelTranslatingLogger
-    factory: lcm_monitoring.logger_factory:getLogger
-    tags:
-      - { name: logger }
-  lcm_monitoring.logger_factory:
-    class: Drupal\lcm_monitoring\Logger\LoggerFactory
-    arguments: ['@lcm_monitoring.settings', '@logger.log_message_parser']
+  # The outer handler swallows any errors that might be thrown,
+  # prevent log-related fatals from killing the site.
+  monolog.handler.lcm:
+    class: Monolog\Handler\WhatFailureGroupHandler
+    arguments: [["@monolog.handler.lcm_inner"]]
+
+  # The inner handler ships data over a socket, either TCP or UDP.
+  monolog.handler.lcm_inner:
+    class: Monolog\Handler\SocketHandler
+    arguments: ["%lcm_monitoring.log_socket%"]
+    calls:
+      - method: setFormatter
+        arguments: ['@monolog.formatter.lcm']
+      - method: setConnectionTimeout
+        arguments: [3]
+      - method: setPersistent
+        arguments: [true]
+
+  # The formatter is responsible for making the log data usable within
+  # the ELK stack.
+  monolog.formatter.lcm:
+    class: Drupal\lcm_monitoring\ECSFormatter
