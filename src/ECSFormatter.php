@@ -32,7 +32,7 @@ class ECSFormatter extends NormalizerFormatter {
       ],
     ];
 
-    if(isset($extra['request_uri'])) {
+    if (isset($extra['request_uri'])) {
       $parsed = parse_url($extra['request_uri']);
       $message['url'] = [
         'full' => $extra['request_uri'],
@@ -40,12 +40,21 @@ class ECSFormatter extends NormalizerFormatter {
         'path' => $parsed['path'],
       ];
     }
-    if(isset($extra['ip'])) {
+    if (isset($extra['ip'])) {
       $message['client']['address'] = $extra['ip'];
       $message['client']['ip'] = $extra['ip'];
     }
-    if(isset($extra['uid'])) {
+    if (isset($extra['uid'])) {
       $message['user']['id'] = $extra['uid'];
+    }
+    if ($cloudId = $this->determineCloudId()) {
+      $message['cloud']['id'] = $cloudId;
+    }
+    if ($cloudProvider = $this->determineCloudProvider()) {
+      $message['cloud']['provider'] = $cloudProvider;
+    }
+    if ($cloudEnvironment = $this->determineCloudEnvironment()) {
+      $message['cloud']['instance']['name'] = $cloudEnvironment;
     }
 
     // Add Log Message
@@ -54,5 +63,32 @@ class ECSFormatter extends NormalizerFormatter {
     }
 
     return $this->toJson($message) . "\n";
+  }
+
+  private function determineCloudId() {
+    if (isset($_SERVER['PANTHEON_SITE_NAME'])) {
+      return $_SERVER['PANTHEON_SITE_NAME'];
+    }
+    if (isset($_SERVER['AH_SITE_GROUP'])) {
+      return $_SERVER['AH_SITE_GROUP'];
+    }
+  }
+
+  private function determineCloudProvider() {
+    if (isset($_SERVER['PANTHEON_SITE_NAME'])) {
+      return 'pantheon';
+    }
+    if (isset($_SERVER['AH_SITE_GROUP'])) {
+      return 'acquia';
+    }
+  }
+
+  private function determineCloudEnvironment() {
+    if (isset($_SERVER['PANTHEON_ENVIRONMENT'])) {
+      return $_SERVER['PANTHEON_ENVIRONMENT'];
+    }
+    if (isset($_SERVER['AH_SITE_ENVIRONMENT'])) {
+      return $_SERVER['AH_SITE_ENVIRONMENT'];
+    }
   }
 }

@@ -1,6 +1,5 @@
 parameters:
-  # Temporary - this will likely be replaced by a public URL later on.
-  lcm_monitoring.log_socket: "tcp://host.docker.internal:9001"
+  lcm_monitoring.log_socket: "tls://logging.api.lastcallmedia.com:9000"
 
 services:
   # The outer handler swallows any errors that might be thrown,
