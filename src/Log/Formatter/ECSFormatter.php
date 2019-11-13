@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Drupal\lcm_monitoring;
+namespace Drupal\lcm_monitoring\Log\Formatter;
 
 use Monolog\Formatter\NormalizerFormatter;
 
@@ -91,4 +91,5 @@ class ECSFormatter extends NormalizerFormatter {
       return $_SERVER['AH_SITE_ENVIRONMENT'];
     }
   }
+
 }
