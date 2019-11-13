@@ -10,7 +10,7 @@ services:
 
   # The inner handler ships data over a socket, either TCP or UDP.
   monolog.handler.lcm_inner:
-    class: Monolog\Handler\SocketHandler
+    class: Drupal\lcm_monitoring\Log\Handler\InstrumentedSocketHandler
     arguments: ["%lcm_monitoring.log_socket%"]
     calls:
       - method: setFormatter
@@ -23,4 +23,4 @@ services:
   # The formatter is responsible for making the log data usable within
   # the ELK stack.
   monolog.formatter.lcm:
-    class: Drupal\lcm_monitoring\ECSFormatter
+    class: Drupal\lcm_monitoring\Log\Formatter\ECSFormatter
