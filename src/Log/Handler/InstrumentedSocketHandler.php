@@ -13,16 +13,19 @@ use Monolog\Handler\SocketHandler;
 class InstrumentedSocketHandler extends SocketHandler {
 
   protected function write(array $record) {
-    $this->executeInstrumented(function() use ($record) {
+    $channel = $record['channel'] ?? 'default';
+
+    $this->executeInstrumented($channel, function() use ($record) {
       parent::write($record);
     });
+
   }
 
-  private function executeInstrumented(callable $callback) {
+  private function executeInstrumented($channel, callable $callback) {
     if(function_exists('newrelic_record_datastore_segment')) {
       return newrelic_record_datastore_segment($callback, [
         'product' => 'Logger',
-        'collection' => 'lcm_monitoring',
+        'collection' => $channel,
         'operation' => 'log',
       ]);
     }
