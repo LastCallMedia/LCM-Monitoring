@@ -16,8 +16,8 @@ class InstrumentedSocketHandler extends SocketHandler {
   }
 
   private function executeInstrumented(callable $callback) {
-    if(function_exists('newrelic_record_custom_event')) {
-      return newrelic_record_custom_event($callback, [
+    if(function_exists('newrelic_record_datastore_segment')) {
+      return newrelic_record_datastore_segment($callback, [
         'product' => 'Logger',
         'collection' => 'drupal.watchdog',
         'operation' => 'put',
