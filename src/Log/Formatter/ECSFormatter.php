@@ -11,6 +11,16 @@ use Monolog\Formatter\NormalizerFormatter;
  */
 class ECSFormatter extends NormalizerFormatter {
 
+  /**
+   * Semver indicating the "version" of the event structure.
+   *
+   * When making changes to the structure of events that are sent by this
+   * format, we should always increment this accordingly. Eg: Breaking
+   * changes need a major version bump so we can manually identify and migrate
+   * records in Elasticsearch.
+   */
+  const VERSION = '0.1.0';
+
   public function __construct() {
     parent::__construct('Y-m-d\TH:i:s.uZ');
   }
@@ -23,6 +33,11 @@ class ECSFormatter extends NormalizerFormatter {
       'log' => [
         'level'  => $record['level_name'],
         'logger' => $record['channel'],
+      ],
+      'agent' => [
+        'name' => 'drupal/lcm_monitoring',
+        'type' => 'drupal/lcm_monitoring',
+        'version' => self::VERSION,
       ],
       'host' => [
         'name' => gethostname(),
